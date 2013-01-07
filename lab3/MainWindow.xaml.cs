@@ -20,6 +20,7 @@ namespace lab3
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 
+    [Serializable()]
     public partial class MainWindow : Window
     {
         public Canvas canvas = new Canvas();
@@ -126,6 +127,7 @@ namespace lab3
             RowDefinition rowDef7 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef8 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef9 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef10 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
@@ -140,6 +142,7 @@ namespace lab3
             theGrid.RowDefinitions.Add(rowDef7);
             theGrid.RowDefinitions.Add(rowDef8);
             theGrid.RowDefinitions.Add(rowDef9);
+            theGrid.RowDefinitions.Add(rowDef10);
 
             Label redness = new Label();
             redness.Content = "Redness";
@@ -275,6 +278,12 @@ namespace lab3
             Grid.SetRow(generator, 8);
             Grid.SetColumn(generator, 0);
 
+            Button picSaver = new Button();
+            picSaver.Content = "Save picture";
+            picSaver.Click += new RoutedEventHandler(savePNG);
+            Grid.SetRow(picSaver, 9);
+            Grid.SetColumn(picSaver, 0);
+
             theGrid.Children.Add(redness);
             theGrid.Children.Add(redSlider);
             theGrid.Children.Add(greenness);
@@ -296,6 +305,7 @@ namespace lab3
             theGrid.Children.Add(flowerSizeSlider);
             theGrid.Children.Add(flowerSizeText);
             theGrid.Children.Add(generator);
+            theGrid.Children.Add(picSaver);
             
             grid.Children.Add(control);
          
@@ -344,5 +354,39 @@ namespace lab3
             numberOfLeaves = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
             leafAmountText.Content = (int) e.NewValue + "%";
         }
+
+        private void savePNG(object sender, RoutedEventArgs e)
+        {
+            util.SaveAsPNG(this, 96, "C:\\Users\\Public\\lab3.png");
+        }
+
+        public static class util
+        {
+            public static void SaveAsPNG(Window window, int dpi, string filename)
+            {
+                var rtb = new RenderTargetBitmap(
+                    (int)window.Width, // width
+                    (int)window.Width, // height
+                    dpi, // dpi X
+                    dpi, // dpi Y
+                    PixelFormats.Pbgra32 // Pixelformat
+                    );
+                rtb.Render(window);
+                saveRTBAsPNG(rtb, filename);
+            }
+
+            private static void saveRTBAsPNG(RenderTargetBitmap bmp, string filename)
+            {
+                var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+
+                enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bmp));
+                using (var stm = System.IO.File.Create(filename))
+                {
+                    enc.Save(stm);
+                }
+                Console.WriteLine("You saved a PNG");
+            }
+        }
+
     }
 }
