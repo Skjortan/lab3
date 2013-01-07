@@ -265,9 +265,9 @@ namespace lab3
             Grid.SetRow(flowerSizeSlider, 7);
             Grid.SetColumn(flowerSizeSlider, 1);
 
-            flowerSizeText.Content = flowerSizeSlider.Value;
-            Grid.SetRow(stemAmountText, 7);
-            Grid.SetColumn(stemAmountText, 2);
+            flowerSizeText.Content = flowerSize;
+            Grid.SetRow(flowerSizeText, 7);
+            Grid.SetColumn(flowerSizeText, 2);
 
             Button generator = new Button();
             generator.Content = "Generate!";
@@ -294,15 +294,17 @@ namespace lab3
             theGrid.Children.Add(leafAmountText);
             theGrid.Children.Add(flowerSizeLabel);
             theGrid.Children.Add(flowerSizeSlider);
+            theGrid.Children.Add(flowerSizeText);
             theGrid.Children.Add(generator);
             
             grid.Children.Add(control);
          
         }
 
-        private void setFlowerSize(object sender, RoutedPropertyChangedEventArgs<double> e)
+        void setFlowerSize(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             flowerSize = Convert.ToInt32(e.NewValue);
+            flowerSizeText.Content = flowerSize;
         }
 
         void setRedness(object sender, RoutedPropertyChangedEventArgs<double> e)
