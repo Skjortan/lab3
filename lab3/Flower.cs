@@ -12,7 +12,7 @@ namespace lab3
 {
     public class Flower
     {
-        public Flower(Canvas canvas, Random random, Point activePoint, Color flowerColor) // Should also receive a color
+        public Flower(Canvas canvas, Random random, Point activePoint, Color flowerColor, int flowerSize) 
         {
             PathFigure myPathFigure = new PathFigure();
             myPathFigure.StartPoint = activePoint;
@@ -24,7 +24,7 @@ namespace lab3
                     new BezierSegment(
                         new Point(activePoint.X - 10, activePoint.Y - 10),
                         new Point(activePoint.X - 10, activePoint.Y - 28),
-                        new Point(activePoint.X, activePoint.Y - 30),
+                        new Point(activePoint.X, activePoint.Y - random.Next(flowerSize - 10, flowerSize + 10)),
                         true));
 
                 myPathFigure.Segments.Add(
@@ -40,7 +40,7 @@ namespace lab3
                     new BezierSegment(
                         new Point(activePoint.X - 10, activePoint.Y - 10),
                         new Point(activePoint.X - 10, activePoint.Y - 20),
-                        new Point(activePoint.X, activePoint.Y - 30),
+                        new Point(activePoint.X, activePoint.Y - random.Next(flowerSize - 10, flowerSize + 10)),
                         true));
 
                 myPathFigure.Segments.Add(

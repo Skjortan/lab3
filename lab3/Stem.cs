@@ -14,20 +14,17 @@ namespace lab3
     {
         bool stop = false;
 
-        public Stem(Canvas canvas, List<Point>points, int tilt, Random random, int leafSize, Color flowerColor, bool allowThorns, bool allowLeaves) {            
+        public Stem(Canvas canvas, List<Point>points, int tilt, Random random, int leafSize, Color flowerColor, int flowerSize, bool allowThorns, bool allowLeaves) {            
             Line stem = new Line();
 
-            String stemColor;
             //Randomize stem color, 50/50 percent chance
             if (random.Next(101) <= 50)
             {
                 stem.Stroke = Brushes.Green;
-                stemColor = "Green";
             }
             else
             {
                 stem.Stroke = Brushes.ForestGreen;
-                stemColor = "ForestGreen";
             }
             stem.StrokeThickness = 5;
 
@@ -70,16 +67,16 @@ namespace lab3
                 {
                     if (allowThorns)
                     {
-                        Thorn thorn = new Thorn(canvas, random, tilt, activePoint, stem.Stroke);
+                        Thorn thorn = new Thorn(canvas, random, activePoint, stem.Stroke);
                     }
                 }
                 else if (action > 98)
                 {
-                    Flower flower = new Flower(canvas, random, activePoint, flowerColor);
+                    Flower flower = new Flower(canvas, random, activePoint, flowerColor, flowerSize);
                     stop = true;
                 }                         
             }
-            Flower finalFlower = new Flower(canvas, random, activePoint, flowerColor);
+            Flower finalFlower = new Flower(canvas, random, activePoint, flowerColor, flowerSize);
         }
         public Point stemPiece(Canvas canvas, 
                                List<Point> points,

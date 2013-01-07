@@ -25,11 +25,12 @@ namespace lab3
         public Canvas canvas = new Canvas();
         public ChildWindow control = new ChildWindow();
 
-        public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, redInt, greenInt, blueInt;
+        public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, flowerSize, redInt, greenInt, blueInt;
 
         public Label stemAmountText = new Label();
         public Label thornAmountText = new Label();
         public Label leafAmountText = new Label();
+        public Label flowerSizeText = new Label();
 
         public MainWindow()
         {
@@ -96,7 +97,7 @@ namespace lab3
                                                   (byte) (greenInt + random.Next(-40, 40)), 
                                                   (byte) (blueInt + random.Next(-40, 40)));
 
-                Stem stem = new Stem(canvas, points, tilt, random, leafSizeInt, flowerColor, allowThorns, allowLeaves);                
+                Stem stem = new Stem(canvas, points, tilt, random, leafSizeInt, flowerColor, flowerSize, allowThorns, allowLeaves);                
             }
         }
         void toolInit(object sender, RoutedEventArgs e) {
@@ -124,6 +125,7 @@ namespace lab3
             RowDefinition rowDef6 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef7 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef8 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef9 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
@@ -137,6 +139,7 @@ namespace lab3
             theGrid.RowDefinitions.Add(rowDef6);
             theGrid.RowDefinitions.Add(rowDef7);
             theGrid.RowDefinitions.Add(rowDef8);
+            theGrid.RowDefinitions.Add(rowDef9);
 
             Label redness = new Label();
             redness.Content = "Redness";
@@ -248,10 +251,28 @@ namespace lab3
             Grid.SetRow(leafAmountText, 6);
             Grid.SetColumn(leafAmountText, 2);
 
+            Label flowerSizeLabel = new Label();
+            flowerSizeLabel.Content = "Flower size";
+            Grid.SetRow(flowerSizeLabel, 7);
+            Grid.SetColumn(flowerSizeLabel, 0);
+
+            Slider flowerSizeSlider = new Slider();
+            flowerSizeSlider.Minimum = 20;
+            flowerSizeSlider.Maximum = 80;
+            flowerSizeSlider.Value = 50;
+            flowerSize = Convert.ToInt32(flowerSizeSlider.Value);
+            flowerSizeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setFlowerSize);
+            Grid.SetRow(flowerSizeSlider, 7);
+            Grid.SetColumn(flowerSizeSlider, 1);
+
+            flowerSizeText.Content = flowerSizeSlider.Value;
+            Grid.SetRow(stemAmountText, 7);
+            Grid.SetColumn(stemAmountText, 2);
+
             Button generator = new Button();
             generator.Content = "Generate!";
             generator.Click += new RoutedEventHandler(generateBouquet);
-            Grid.SetRow(generator, 7);
+            Grid.SetRow(generator, 8);
             Grid.SetColumn(generator, 0);
 
             theGrid.Children.Add(redness);
@@ -271,10 +292,17 @@ namespace lab3
             theGrid.Children.Add(leafAmount);
             theGrid.Children.Add(leafSlider);
             theGrid.Children.Add(leafAmountText);
+            theGrid.Children.Add(flowerSizeLabel);
+            theGrid.Children.Add(flowerSizeSlider);
             theGrid.Children.Add(generator);
             
             grid.Children.Add(control);
          
+        }
+
+        private void setFlowerSize(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            flowerSize = Convert.ToInt32(e.NewValue);
         }
 
         void setRedness(object sender, RoutedPropertyChangedEventArgs<double> e)

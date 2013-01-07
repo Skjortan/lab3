@@ -12,7 +12,7 @@ namespace lab3
 {
     public class Thorn
     {
-        public Thorn(Canvas canvas, Random random, int tilt, Point activePoint, Brush stemColor)
+        public Thorn(Canvas canvas, Random random, Point activePoint, Brush stemColor)
         {
             PathFigure myPathFigure = new PathFigure();
             myPathFigure.StartPoint = activePoint;
@@ -57,31 +57,7 @@ namespace lab3
             canvas.Children.Add(new Path() { Fill = Brushes.DarkOliveGreen,
                                              Stroke = Brushes.DarkOliveGreen,
                                              StrokeThickness = 1,
-                                             Data = myPathGeometry,
-                                             /*RenderTransform = myRotateTransform*/ });
-
-
-
-            /*
-            Rectangle thorn = new Rectangle();
-            thorn.Width = 15;
-            thorn.Height = 15;
-            thorn.RenderTransform = new RotateTransform(tilt+45, thorn.Width / 2, thorn.Height / 2);
-
-            if (stemColor == "Green")
-            {
-                thorn.Fill = Brushes.Green;
-            }
-            else
-            {
-                thorn.Fill = Brushes.ForestGreen;
-            }
-
-            Canvas.SetLeft(thorn, activePoint.X - 7.5);
-            Canvas.SetTop(thorn, activePoint.Y - 7.5);
-
-            canvas.Children.Add(thorn);
-             * */
+                                             Data = myPathGeometry });
         }
     }
 }
