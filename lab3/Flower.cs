@@ -60,9 +60,7 @@ namespace lab3
                 RotateTransform myRotateTransform = new RotateTransform(i);
                 myRotateTransform.CenterX = activePoint.X;
                 myRotateTransform.CenterY = activePoint.Y;
-                Path path = new Path();
-                Canvas.SetZIndex(path, 10);
-
+                
                 canvas.Children.Add(new Path() { Fill = new SolidColorBrush(flowerColor),
                                                  Stroke = Brushes.Black,
                                                  StrokeThickness = 1,

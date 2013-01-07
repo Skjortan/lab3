@@ -70,18 +70,15 @@ namespace lab3
                 {
                     if (allowThorns)
                     {
-                        Thorn thorn = new Thorn(canvas, tilt, activePoint, stemColor);
+                        Thorn thorn = new Thorn(canvas, random, tilt, activePoint, stem.Stroke);
                     }
                 }
                 else if (action > 98)
                 {
                     Flower flower = new Flower(canvas, random, activePoint, flowerColor);
                     stop = true;
-                }               
-                //thorn();               
+                }                         
             }
-            Leaf finalLeftLeaf = new Leaf(canvas, random, activePoint, leafSize);
-            Leaf finalRightLeaf = new Leaf(canvas, random, activePoint, leafSize);
             Flower finalFlower = new Flower(canvas, random, activePoint, flowerColor);
         }
         public Point stemPiece(Canvas canvas, 
