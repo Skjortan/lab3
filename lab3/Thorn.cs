@@ -32,7 +32,6 @@ namespace lab3
             Canvas.SetTop(thorn, activePoint.Y - 7.5);
 
             canvas.Children.Add(thorn);
-            Console.WriteLine("Added a thorn! " + tilt);
         }
     }
 }

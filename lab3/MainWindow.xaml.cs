@@ -34,9 +34,6 @@ namespace lab3
             canvas.Background = Brushes.LightSkyBlue;
             canvas.Loaded += new RoutedEventHandler(toolInit);      
             grid.Children.Add(canvas);
-
-            //Testing for Git
-            //toolInit();            
         }
         void generateBouquet(object sender, RoutedEventArgs e) {
             canvas.Children.Clear();
@@ -62,50 +59,52 @@ namespace lab3
             points.Add(waistPoint);
             points.Add(bottomCenter);            
 
-            //int numberOfStems = 70;
-            //double minimumY = waistPoint.Y / 4; // = points[0].Y
-            double factorY = (points[2].Y - points[0].Y) / numberOfStems;
-            //double factorY = (waistPoint.Y - minimumY) / numberOfStems;
-
-            //double minimumYFactor = 100 / minimumY;
+            double factorY = (points[2].Y - points[0].Y) / numberOfStems; 
             int tiltFactor = 100 / numberOfStems;
-            for (int i = 0; i <= numberOfStems; i++)
-            {
+            bool allowThorns = true;
+            bool allowLeaves = true;
+
+            for (int i = 1; i <= numberOfStems; i++)
+            {                
+                if (objectCounter["amountOfThorns"] == numberOfThorns)
+                {
+                    allowThorns = false;
+                }
+                else {
+                    objectCounter["amountOfThorns"]++;
+                }
+                if (objectCounter["amountOfLeaves"] == numberOfLeaves)
+                {
+                    allowLeaves = false;
+                }
+                else
+                {
+                    objectCounter["amountOfLeaves"]++;
+                }
+
                 int tilt = i * tiltFactor;
                 points[0] = new Point() { X = points[0].X, Y = points[0].Y + (i * factorY) };
                 if (points[0].Y > points[1].Y) {
                     points[0] = new Point() { X = points[0].X, Y = points[1].Y / 4 };
                 }
-                //points[0].Y = points[0].Y + (i * factorY);
 
                 Color flowerColor = Color.FromRgb((byte) (redInt + random.Next(-40, 40)), 
                                                   (byte) (greenInt + random.Next(-40, 40)), 
                                                   (byte) (blueInt + random.Next(-40, 40)));
 
-                Stem stem = new Stem(canvas, points, tilt, random, leafSizeInt, flowerColor);                
+                Stem stem = new Stem(canvas, points, tilt, random, leafSizeInt, flowerColor, allowThorns, allowLeaves);                
             }
         }
         void toolInit(object sender, RoutedEventArgs e) {
             control.Name = "ToolWindow";
-            control.Caption = "Tools for boquet";
-            //toolWin.Height = 250;
-            control.Left = 10;
-            control.Top = 50;
+            control.Caption = "Tools for bouquet";
+            control.Left = 0;
+            control.Top = 0;
             control.Width = 260;
             control.Margin = new Thickness(0);
             control.IsModal = false;
             control.WindowState = Xceed.Wpf.Toolkit.WindowState.Open;
             Grid.SetRowSpan(control, 3);
-            /*
-            control.Caption = "Tools";
-            control.Name = "toolControl";
-            control.Left = 0;
-            control.Top = 0;
-            control.IsModal = false;
-            control.WindowState = Xceed.Wpf.Toolkit.WindowState.Open;
-             */
-
-            //Grid toolGrid = new Grid();
 
             control.Content = new Grid() { Name = "toolWinGrid", Margin = new Thickness(10) };
             Grid theGrid = (Grid)control.Content;
@@ -204,7 +203,7 @@ namespace lab3
             Grid.SetColumn(stemSlider, 1);
 
             Label thornAmount = new Label();
-            thornAmount.Content = "Amount of thorns";
+            thornAmount.Content = "Thorn percentage";
             Grid.SetRow(thornAmount, 5);
             Grid.SetColumn(thornAmount, 0);
 
@@ -212,13 +211,14 @@ namespace lab3
             thornSlider.Minimum = 0;
             thornSlider.Maximum = 100;
             thornSlider.Value = 50;
-            numberOfThorns = Convert.ToInt32(thornSlider.Value);
+            Console.WriteLine("thornSlider.Value: " + Convert.ToInt32(thornSlider.Value));
+            numberOfThorns = (Convert.ToInt32(thornSlider.Value) / 100) * numberOfStems;
             thornSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfThorns);
             Grid.SetRow(thornSlider, 5);
             Grid.SetColumn(thornSlider, 1);
 
             Label leafAmount = new Label();
-            leafAmount.Content = "Amount of leaves";
+            leafAmount.Content = "Leaf percentage";
             Grid.SetRow(leafAmount, 6);
             Grid.SetColumn(leafAmount, 0);
 
@@ -226,7 +226,7 @@ namespace lab3
             leafSlider.Minimum = 0;
             leafSlider.Maximum = 100;
             leafSlider.Value = 50;
-            numberOfLeaves = Convert.ToInt32(leafSlider.Value);
+            numberOfLeaves = (Convert.ToInt32(leafSlider.Value) / 100) * numberOfStems;
             leafSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfLeaves);
             Grid.SetRow(leafSlider, 6);
             Grid.SetColumn(leafSlider, 1);
@@ -252,8 +252,6 @@ namespace lab3
             theGrid.Children.Add(leafAmount);
             theGrid.Children.Add(leafSlider);
             theGrid.Children.Add(generator);
-            //toolGrid.Children.Add(generator);
-            //control.Content = toolGrid;
             
             grid.Children.Add(control);
          
@@ -286,12 +284,12 @@ namespace lab3
 
         void setNumberOfThorns(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            numberOfThorns = Convert.ToInt32(e.NewValue);
+            numberOfThorns = Convert.ToInt32((e.NewValue / 100) * numberOfStems);
         }
 
         void setNumberOfLeaves(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            numberOfLeaves = Convert.ToInt32(e.NewValue);
+            numberOfLeaves = Convert.ToInt32((e.NewValue / 100) * numberOfStems);
         }
     }
 }

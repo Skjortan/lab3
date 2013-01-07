@@ -14,7 +14,7 @@ namespace lab3
     {
         bool stop = false;
 
-        public Stem(Canvas canvas, List<Point>points, int tilt, Random random, int leafSize, Color flowerColor) {            
+        public Stem(Canvas canvas, List<Point>points, int tilt, Random random, int leafSize, Color flowerColor, bool allowThorns, bool allowLeaves) {            
             Line stem = new Line();
 
             String stemColor;
@@ -57,15 +57,21 @@ namespace lab3
                 }
                 else if (action > 60 && action <= 73)
                 {
-                    Branch branch = new Branch(canvas, points, random, activePoint, direction, leafSize);
+                    Branch branch = new Branch(canvas, points, random, activePoint, direction, leafSize, allowLeaves);
                 }
                 else if (action > 73 && action <= 86)
                 {
-                    Leaf leaf = new Leaf(canvas, random, activePoint, leafSize);
+                    if (allowLeaves)
+                    {
+                        Leaf leaf = new Leaf(canvas, random, activePoint, leafSize);
+                    }
                 }
                 else if(action > 86 && action <= 98)
                 {
-                    Thorn thorn = new Thorn(canvas, tilt, activePoint, stemColor);          
+                    if (allowThorns)
+                    {
+                        Thorn thorn = new Thorn(canvas, tilt, activePoint, stemColor);
+                    }
                 }
                 else if (action > 98)
                 {

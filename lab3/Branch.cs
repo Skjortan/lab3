@@ -14,7 +14,7 @@ namespace lab3
     {
         bool stop = false;
 
-        public Branch(Canvas canvas, List<Point> points, Random random, Point activePoint, string direction, int leafSize) {
+        public Branch(Canvas canvas, List<Point> points, Random random, Point activePoint, string direction, int leafSize, bool allowLeaves) {
             
             while (stop == false)
             {
@@ -24,7 +24,10 @@ namespace lab3
                 }
                 else if (action < 20 && action >= 10)
                 {
-                    Leaf leaf = new Leaf(canvas, random, activePoint, leafSize);
+                    if (allowLeaves)
+                    {
+                        Leaf leaf = new Leaf(canvas, random, activePoint, leafSize);
+                    }
                 }
                 else
                 {
