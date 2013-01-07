@@ -27,6 +27,10 @@ namespace lab3
 
         public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, redInt, greenInt, blueInt;
 
+        public Label stemAmountText = new Label();
+        public Label thornAmountText = new Label();
+        public Label leafAmountText = new Label();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,6 +43,12 @@ namespace lab3
             canvas.Children.Clear();
 
             Random random = new Random();
+
+            //Decides how many of the stems that should have thorns and leaves
+            numberOfThorns = (int) (numberOfThorns * numberOfStems) / 100;
+            numberOfLeaves = (int) (numberOfLeaves * numberOfStems) / 100;
+
+            Console.WriteLine(numberOfThorns);
 
             var objectCounter = new Dictionary<string, int>();
             objectCounter.Add("amountOfStems", 0);
@@ -100,7 +110,7 @@ namespace lab3
             control.Caption = "Tools for bouquet";
             control.Left = 0;
             control.Top = 0;
-            control.Width = 260;
+            control.Width = 300;
             control.Margin = new Thickness(0);
             control.IsModal = false;
             control.WindowState = Xceed.Wpf.Toolkit.WindowState.Open;
@@ -110,6 +120,7 @@ namespace lab3
             Grid theGrid = (Grid)control.Content;
             ColumnDefinition colDef1 = new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) };
             ColumnDefinition colDef2 = new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) };
+            ColumnDefinition colDef3 = new ColumnDefinition() { Width = new GridLength(0.4, GridUnitType.Star) };
 
             RowDefinition rowDef1 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef2 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
@@ -122,6 +133,7 @@ namespace lab3
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
+            theGrid.ColumnDefinitions.Add(colDef3);
 
             theGrid.RowDefinitions.Add(rowDef1);
             theGrid.RowDefinitions.Add(rowDef2);
@@ -202,6 +214,10 @@ namespace lab3
             Grid.SetRow(stemSlider, 4);
             Grid.SetColumn(stemSlider, 1);
 
+            stemAmountText.Content = stemSlider.Value;
+            Grid.SetRow(stemAmountText, 4);
+            Grid.SetColumn(stemAmountText, 2);
+
             Label thornAmount = new Label();
             thornAmount.Content = "Thorn percentage";
             Grid.SetRow(thornAmount, 5);
@@ -217,6 +233,10 @@ namespace lab3
             Grid.SetRow(thornSlider, 5);
             Grid.SetColumn(thornSlider, 1);
 
+            thornAmountText.Content = thornSlider.Value + "%";
+            Grid.SetRow(thornAmountText, 5);
+            Grid.SetColumn(thornAmountText, 2);
+
             Label leafAmount = new Label();
             leafAmount.Content = "Leaf percentage";
             Grid.SetRow(leafAmount, 6);
@@ -230,6 +250,10 @@ namespace lab3
             leafSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfLeaves);
             Grid.SetRow(leafSlider, 6);
             Grid.SetColumn(leafSlider, 1);
+
+            leafAmountText.Content = leafSlider.Value + "%";
+            Grid.SetRow(leafAmountText, 6);
+            Grid.SetColumn(leafAmountText, 2);
 
             Button generator = new Button();
             generator.Content = "Generate!";
@@ -247,10 +271,13 @@ namespace lab3
             theGrid.Children.Add(leafSizeSlider);
             theGrid.Children.Add(stemAmount);
             theGrid.Children.Add(stemSlider);
+            theGrid.Children.Add(stemAmountText);
             theGrid.Children.Add(thornAmount);
             theGrid.Children.Add(thornSlider);
+            theGrid.Children.Add(thornAmountText);
             theGrid.Children.Add(leafAmount);
             theGrid.Children.Add(leafSlider);
+            theGrid.Children.Add(leafAmountText);
             theGrid.Children.Add(generator);
             
             grid.Children.Add(control);
@@ -280,16 +307,19 @@ namespace lab3
         void setNumberOfStems(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             numberOfStems = Convert.ToInt32(e.NewValue);
+            stemAmountText.Content = numberOfStems;
         }
 
         void setNumberOfThorns(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            numberOfThorns = Convert.ToInt32((e.NewValue / 100) * numberOfStems);
+            numberOfThorns = Convert.ToInt32(e.NewValue);
+            thornAmountText.Content = numberOfThorns + "%";
         }
 
         void setNumberOfLeaves(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            numberOfLeaves = Convert.ToInt32((e.NewValue / 100) * numberOfStems);
+            numberOfLeaves = Convert.ToInt32(e.NewValue);
+            leafAmountText.Content = numberOfLeaves + "%";
         }
     }
 }
