@@ -35,6 +35,7 @@ namespace lab3
             canvas.Loaded += new RoutedEventHandler(toolInit);      
             grid.Children.Add(canvas);
 
+            //Testing for Git
             //toolInit();            
         }
         void generateBouquet(object sender, RoutedEventArgs e) {
