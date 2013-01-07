@@ -44,12 +44,6 @@ namespace lab3
 
             Random random = new Random();
 
-            //Decides how many of the stems that should have thorns and leaves
-            numberOfThorns = (int) (numberOfThorns * numberOfStems) / 100;
-            numberOfLeaves = (int) (numberOfLeaves * numberOfStems) / 100;
-
-            Console.WriteLine(numberOfThorns);
-
             var objectCounter = new Dictionary<string, int>();
             objectCounter.Add("amountOfStems", 0);
             objectCounter.Add("amountOfThorns",0);
@@ -312,14 +306,14 @@ namespace lab3
 
         void setNumberOfThorns(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            numberOfThorns = Convert.ToInt32(e.NewValue);
-            thornAmountText.Content = numberOfThorns + "%";
+            numberOfThorns = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
+            thornAmountText.Content = (int) e.NewValue + "%";
         }
 
         void setNumberOfLeaves(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            numberOfLeaves = Convert.ToInt32(e.NewValue);
-            leafAmountText.Content = numberOfLeaves + "%";
+            numberOfLeaves = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
+            leafAmountText.Content = (int) e.NewValue + "%";
         }
     }
 }
