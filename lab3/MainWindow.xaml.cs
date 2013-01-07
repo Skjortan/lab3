@@ -221,8 +221,7 @@ namespace lab3
             thornSlider.Minimum = 0;
             thornSlider.Maximum = 100;
             thornSlider.Value = 50;
-            Console.WriteLine("thornSlider.Value: " + Convert.ToInt32(thornSlider.Value));
-            numberOfThorns = (Convert.ToInt32(thornSlider.Value) / 100) * numberOfStems;
+            numberOfThorns = (Convert.ToInt32(thornSlider.Value) * numberOfStems) / 100;
             thornSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfThorns);
             Grid.SetRow(thornSlider, 5);
             Grid.SetColumn(thornSlider, 1);
@@ -240,7 +239,7 @@ namespace lab3
             leafSlider.Minimum = 0;
             leafSlider.Maximum = 100;
             leafSlider.Value = 50;
-            numberOfLeaves = (Convert.ToInt32(leafSlider.Value) / 100) * numberOfStems;
+            numberOfLeaves = (Convert.ToInt32(leafSlider.Value) * numberOfStems) / 100;
             leafSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfLeaves);
             Grid.SetRow(leafSlider, 6);
             Grid.SetColumn(leafSlider, 1);
