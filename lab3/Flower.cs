@@ -39,13 +39,13 @@ namespace lab3
                 myPathFigure.Segments.Add(
                     new BezierSegment(
                         new Point(activePoint.X - 10, activePoint.Y - 10),
-                        new Point(activePoint.X - 10, activePoint.Y - 20),
+                        new Point(activePoint.X - 10, activePoint.Y - random.Next(flowerSize - 10, flowerSize + 10)),
                         new Point(activePoint.X, activePoint.Y - random.Next(flowerSize - 10, flowerSize + 10)),
                         true));
 
                 myPathFigure.Segments.Add(
                     new BezierSegment(
-                        new Point(activePoint.X + 10, activePoint.Y - 20),
+                        new Point(activePoint.X + 10, activePoint.Y - random.Next(flowerSize - 10, flowerSize + 10)),
                         new Point(activePoint.X + 10, activePoint.Y - 10),
                         new Point(activePoint.X, activePoint.Y),
                         true));
