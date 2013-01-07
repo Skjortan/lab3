@@ -40,6 +40,12 @@ namespace lab3
 
             Random random = new Random();
 
+            //Decides how many of the stems that should have thorns and leaves
+            numberOfThorns = (int) (numberOfThorns * numberOfStems) / 100;
+            numberOfLeaves = (int) (numberOfLeaves * numberOfStems) / 100;
+
+            Console.WriteLine(numberOfThorns);
+
             var objectCounter = new Dictionary<string, int>();
             objectCounter.Add("amountOfStems", 0);
             objectCounter.Add("amountOfThorns",0);
