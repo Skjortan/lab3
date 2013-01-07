@@ -28,6 +28,10 @@ namespace lab3
 
         public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, flowerSize, redInt, greenInt, blueInt;
 
+        public Label rednessText = new Label();
+        public Label greennessText = new Label();
+        public Label bluenessText = new Label();
+        public Label leafSizeText = new Label();
         public Label stemAmountText = new Label();
         public Label thornAmountText = new Label();
         public Label leafAmountText = new Label();
@@ -158,6 +162,10 @@ namespace lab3
             Grid.SetRow(redSlider, 0);
             Grid.SetColumn(redSlider, 1);
 
+            rednessText.Content = redSlider.Value;
+            Grid.SetRow(rednessText, 0);
+            Grid.SetColumn(rednessText, 2);
+
             Label greenness = new Label();
             greenness.Content = "Greenness";
             Grid.SetRow(greenness, 1);
@@ -171,6 +179,10 @@ namespace lab3
             greenSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setGreenness);
             Grid.SetRow(greenSlider, 1);
             Grid.SetColumn(greenSlider, 1);
+
+            greennessText.Content = greenSlider.Value;
+            Grid.SetRow(greennessText, 1);
+            Grid.SetColumn(greennessText, 2);
 
             Label blueness = new Label();
             blueness.Content = "Blueness";
@@ -186,6 +198,10 @@ namespace lab3
             Grid.SetRow(blueSlider, 2);
             Grid.SetColumn(blueSlider, 1);
 
+            bluenessText.Content = blueSlider.Value;
+            Grid.SetRow(bluenessText, 2);
+            Grid.SetColumn(bluenessText, 2);
+
             Label leafSize = new Label();
             leafSize.Content = "Leaf size";
             Grid.SetRow(leafSize, 3);
@@ -199,6 +215,10 @@ namespace lab3
             leafSizeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setLeafSize);
             Grid.SetRow(leafSizeSlider, 3);
             Grid.SetColumn(leafSizeSlider, 1);
+
+            leafSizeText.Content = leafSizeSlider.Value;
+            Grid.SetRow(leafSizeText, 3);
+            Grid.SetColumn(leafSizeText, 2);
 
             Label stemAmount= new Label();
             stemAmount.Content = "Amount of stems";
@@ -268,7 +288,8 @@ namespace lab3
             Grid.SetRow(flowerSizeSlider, 7);
             Grid.SetColumn(flowerSizeSlider, 1);
 
-            flowerSizeText.Content = flowerSize;
+
+            flowerSizeText.Content = flowerSizeSlider.Value;
             Grid.SetRow(flowerSizeText, 7);
             Grid.SetColumn(flowerSizeText, 2);
 
@@ -286,12 +307,16 @@ namespace lab3
 
             theGrid.Children.Add(redness);
             theGrid.Children.Add(redSlider);
+            theGrid.Children.Add(rednessText);
             theGrid.Children.Add(greenness);
             theGrid.Children.Add(greenSlider);
+            theGrid.Children.Add(greennessText);
             theGrid.Children.Add(blueness);
             theGrid.Children.Add(blueSlider);
+            theGrid.Children.Add(bluenessText);
             theGrid.Children.Add(leafSize);
             theGrid.Children.Add(leafSizeSlider);
+            theGrid.Children.Add(leafSizeText);
             theGrid.Children.Add(stemAmount);
             theGrid.Children.Add(stemSlider);
             theGrid.Children.Add(stemAmountText);
@@ -311,30 +336,28 @@ namespace lab3
          
         }
 
-        void setFlowerSize(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            flowerSize = Convert.ToInt32(e.NewValue);
-            flowerSizeText.Content = flowerSize;
-        }
-
         void setRedness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             redInt = Convert.ToInt32(e.NewValue);
+            rednessText.Content = (int) e.NewValue;
         }
 
         void setGreenness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             greenInt = Convert.ToInt32(e.NewValue);
+            greennessText.Content = (int) e.NewValue;
         }
 
         void setBlueness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             blueInt = Convert.ToInt32(e.NewValue);
+            bluenessText.Content = (int) e.NewValue;
         }
 
         void setLeafSize(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             leafSizeInt = Convert.ToInt32(e.NewValue);
+            leafSizeText.Content = (int)e.NewValue;
         }
 
         void setNumberOfStems(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -353,6 +376,12 @@ namespace lab3
         {
             numberOfLeaves = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
             leafAmountText.Content = (int) e.NewValue + "%";
+        }
+
+        private void setFlowerSize(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            flowerSize = Convert.ToInt32(e.NewValue);
+            flowerSizeText.Content = (int)e.NewValue;
         }
 
         private void savePNG(object sender, RoutedEventArgs e)
@@ -387,6 +416,5 @@ namespace lab3
                 Console.WriteLine("You saved a PNG");
             }
         }
-
     }
 }
