@@ -25,7 +25,7 @@ namespace lab3
         public Canvas canvas = new Canvas();
         public ChildWindow control = new ChildWindow();
 
-        public int leafSizeInt, numberOfStems, redInt, greenInt, blueInt;
+        public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, redInt, greenInt, blueInt;
 
         public MainWindow()
         {
@@ -42,6 +42,11 @@ namespace lab3
             canvas.Children.Clear();
 
             Random random = new Random();
+
+            var objectCounter = new Dictionary<string, int>();
+            objectCounter.Add("amountOfStems", 0);
+            objectCounter.Add("amountOfThorns",0);
+            objectCounter.Add("amountOfLeaves", 0);
 
             List<Point> points = new List<Point>();
             Point minPoint = new Point()     { X = canvas.ActualWidth / 4,              //Min points (0)
@@ -113,6 +118,8 @@ namespace lab3
             RowDefinition rowDef4 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef5 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef6 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef7 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef8 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
@@ -123,6 +130,8 @@ namespace lab3
             theGrid.RowDefinitions.Add(rowDef4);
             theGrid.RowDefinitions.Add(rowDef5);
             theGrid.RowDefinitions.Add(rowDef6);
+            theGrid.RowDefinitions.Add(rowDef7);
+            theGrid.RowDefinitions.Add(rowDef8);
 
             Label redness = new Label();
             redness.Content = "Redness";
@@ -171,14 +180,14 @@ namespace lab3
             Grid.SetRow(leafSize, 3);
             Grid.SetColumn(leafSize, 0);
 
-            Slider leafSlider = new Slider();
-            leafSlider.Minimum = 20;
-            leafSlider.Maximum = 80;
-            leafSlider.Value = 50;
-            leafSizeInt = Convert.ToInt32(leafSlider.Value);
-            leafSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setLeafSize);
-            Grid.SetRow(leafSlider, 3);
-            Grid.SetColumn(leafSlider, 1);
+            Slider leafSizeSlider = new Slider();
+            leafSizeSlider.Minimum = 20;
+            leafSizeSlider.Maximum = 80;
+            leafSizeSlider.Value = 50;
+            leafSizeInt = Convert.ToInt32(leafSizeSlider.Value);
+            leafSizeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setLeafSize);
+            Grid.SetRow(leafSizeSlider, 3);
+            Grid.SetColumn(leafSizeSlider, 1);
 
             Label stemAmount= new Label();
             stemAmount.Content = "Amount of stems";
@@ -194,10 +203,38 @@ namespace lab3
             Grid.SetRow(stemSlider, 4);
             Grid.SetColumn(stemSlider, 1);
 
+            Label thornAmount = new Label();
+            thornAmount.Content = "Amount of thorns";
+            Grid.SetRow(thornAmount, 5);
+            Grid.SetColumn(thornAmount, 0);
+
+            Slider thornSlider = new Slider();
+            thornSlider.Minimum = 0;
+            thornSlider.Maximum = 100;
+            thornSlider.Value = 50;
+            numberOfThorns = Convert.ToInt32(thornSlider.Value);
+            thornSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfThorns);
+            Grid.SetRow(thornSlider, 5);
+            Grid.SetColumn(thornSlider, 1);
+
+            Label leafAmount = new Label();
+            leafAmount.Content = "Amount of leaves";
+            Grid.SetRow(leafAmount, 6);
+            Grid.SetColumn(leafAmount, 0);
+
+            Slider leafSlider = new Slider();
+            leafSlider.Minimum = 0;
+            leafSlider.Maximum = 100;
+            leafSlider.Value = 50;
+            numberOfLeaves = Convert.ToInt32(leafSlider.Value);
+            leafSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfLeaves);
+            Grid.SetRow(leafSlider, 6);
+            Grid.SetColumn(leafSlider, 1);
+
             Button generator = new Button();
             generator.Content = "Generate!";
             generator.Click += new RoutedEventHandler(generateBouquet);
-            Grid.SetRow(generator, 5);
+            Grid.SetRow(generator, 7);
             Grid.SetColumn(generator, 0);
 
             theGrid.Children.Add(redness);
@@ -207,9 +244,13 @@ namespace lab3
             theGrid.Children.Add(blueness);
             theGrid.Children.Add(blueSlider);
             theGrid.Children.Add(leafSize);
-            theGrid.Children.Add(leafSlider);
+            theGrid.Children.Add(leafSizeSlider);
             theGrid.Children.Add(stemAmount);
             theGrid.Children.Add(stemSlider);
+            theGrid.Children.Add(thornAmount);
+            theGrid.Children.Add(thornSlider);
+            theGrid.Children.Add(leafAmount);
+            theGrid.Children.Add(leafSlider);
             theGrid.Children.Add(generator);
             //toolGrid.Children.Add(generator);
             //control.Content = toolGrid;
@@ -241,6 +282,16 @@ namespace lab3
         void setNumberOfStems(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             numberOfStems = Convert.ToInt32(e.NewValue);
+        }
+
+        void setNumberOfThorns(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            numberOfThorns = Convert.ToInt32(e.NewValue);
+        }
+
+        void setNumberOfLeaves(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            numberOfLeaves = Convert.ToInt32(e.NewValue);
         }
     }
 }
