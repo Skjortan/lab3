@@ -14,7 +14,7 @@ namespace lab3
     {
         bool stop = false;
 
-        public Stem(Canvas canvas, List<Point>points, int tilt, Random random, int leafSize, Color flowerColor, int flowerSize, bool allowThorns, bool allowLeaves) {            
+        public Stem(Canvas canvas, List<Point>points, int tilt, Random random, int leafSize, Color flowerColor, int flowerSize, bool allowThorns, bool allowLeaves, bool allowFlowers) {            
             Line stem = new Line();
 
             //Randomize stem color, 50/50 percent chance
@@ -72,11 +72,17 @@ namespace lab3
                 }
                 else if (action > 98)
                 {
-                    Flower flower = new Flower(canvas, random, activePoint, flowerColor, flowerSize);
+                    if (allowFlowers)
+                    {
+                        Flower flower = new Flower(canvas, random, activePoint, flowerColor, flowerSize);
+                    }
                     stop = true;
                 }                         
             }
-            Flower finalFlower = new Flower(canvas, random, activePoint, flowerColor, flowerSize);
+            if (allowFlowers)
+            {
+                Flower finalFlower = new Flower(canvas, random, activePoint, flowerColor, flowerSize);
+            }
         }
         public Point stemPiece(Canvas canvas, 
                                List<Point> points,

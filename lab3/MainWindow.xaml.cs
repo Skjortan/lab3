@@ -37,6 +37,7 @@ namespace lab3
         public Label thornAmountText = new Label();
         public Label leafAmountText = new Label();
         public Label flowerSizeText = new Label();
+        public Label flowerAmountText = new Label();
 
         public Slider redSlider = new Slider();
         public Slider greenSlider = new Slider();
@@ -46,6 +47,7 @@ namespace lab3
         public Slider thornSlider = new Slider();
         public Slider leafSlider = new Slider();
         public Slider flowerSizeSlider = new Slider();
+        public Slider flowerSlider = new Slider();
 
         public MainWindow()
         {
@@ -64,6 +66,7 @@ namespace lab3
             objectCounter.Add("amountOfStems", 0);
             objectCounter.Add("amountOfThorns",0);
             objectCounter.Add("amountOfLeaves", 0);
+            objectCounter.Add("amountOfFlowers", 0);
 
             List<Point> points = new List<Point>();
             Point minPoint = new Point()     { X = canvas.ActualWidth / 4,              //Min points (0)
@@ -83,6 +86,7 @@ namespace lab3
             int tiltFactor = 100 / numberOfStems;
             bool allowThorns = true;
             bool allowLeaves = true;
+            bool allowFlowers = true;
 
             for (int i = 1; i <= numberOfStems; i++)
             {                
@@ -101,7 +105,14 @@ namespace lab3
                 {
                     objectCounter["amountOfLeaves"]++;
                 }
-
+                if (objectCounter["amountOfFlowers"] == numberOfFlowers)
+                {
+                    allowFlowers = false;
+                }
+                else 
+                {
+                    objectCounter["amountOfFlowers"]++;
+                }
                 int tilt = i * tiltFactor;
                 points[0] = new Point() { X = points[0].X, Y = points[0].Y + (i * factorY) };
                 if (points[0].Y > points[1].Y) {
@@ -112,7 +123,7 @@ namespace lab3
                                                   (byte) (greenInt + random.Next(-40, 40)), 
                                                   (byte) (blueInt + random.Next(-40, 40)));
 
-                Stem stem = new Stem(canvas, points, tilt, random, leafSizeInt, flowerColor, flowerSize, allowThorns, allowLeaves);                
+                Stem stem = new Stem(canvas, points, tilt, random, leafSizeInt, flowerColor, flowerSize, allowThorns, allowLeaves, allowFlowers);                
             }
         }
         void toolInit(object sender, RoutedEventArgs e) {
@@ -144,6 +155,7 @@ namespace lab3
             RowDefinition rowDef10 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef11 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef12 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef13 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
@@ -161,6 +173,7 @@ namespace lab3
             theGrid.RowDefinitions.Add(rowDef10);
             theGrid.RowDefinitions.Add(rowDef11);
             theGrid.RowDefinitions.Add(rowDef12);
+            theGrid.RowDefinitions.Add(rowDef13);
 
             // Set the default settings
             string[] settings = {200+"",
@@ -168,6 +181,7 @@ namespace lab3
                                  200+"",
                                  50+"",
                                  60+"",
+                                 50+"",
                                  50+"",
                                  50+"",
                                  50+""};
@@ -304,34 +318,58 @@ namespace lab3
             Grid.SetRow(flowerSizeSlider, 7);
             Grid.SetColumn(flowerSizeSlider, 1);
 
-
             flowerSizeText.Content = flowerSizeSlider.Value;
             Grid.SetRow(flowerSizeText, 7);
             Grid.SetColumn(flowerSizeText, 2);
 
+            Label flowerAmount = new Label();
+            flowerAmount.Content = "Flower percentage";
+            Grid.SetRow(flowerAmount, 8);
+            Grid.SetColumn(flowerAmount, 0);
+
+            flowerSlider.Minimum = 0;
+            flowerSlider.Maximum = 100;
+            flowerSlider.Value = Convert.ToInt32(settings[8]);
+            numberOfFlowers = (Convert.ToInt32(flowerSlider.Value) * numberOfStems) / 100;
+            flowerSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfFlowers);
+            Grid.SetRow(flowerSlider, 8);
+            Grid.SetColumn(flowerSlider, 1);
+
+            flowerAmountText.Content = flowerSlider.Value + "%";
+            Grid.SetRow(flowerAmountText, 8);
+            Grid.SetColumn(flowerAmountText, 2);
+
             Button generator = new Button();
-            generator.Content = "Generate!";
+            generator.Content = "Generate bouquet!";
             generator.Click += new RoutedEventHandler(generateBouquet);
-            Grid.SetRow(generator, 8);
+            Grid.SetRow(generator, 9);
             Grid.SetColumn(generator, 0);
+            generator.Margin = new Thickness(5);
+            Grid.SetColumnSpan(generator, 3);
 
             Button picSaver = new Button();
             picSaver.Content = "Save picture";
             picSaver.Click += new RoutedEventHandler(savePNG);
-            Grid.SetRow(picSaver, 9);
+            Grid.SetRow(picSaver, 10);
             Grid.SetColumn(picSaver, 0);
+            picSaver.Margin = new Thickness(5);
+            Grid.SetColumnSpan(picSaver, 3);
 
             Button settingsSaver = new Button();
             settingsSaver.Content = "Save settings";
             settingsSaver.Click += new RoutedEventHandler(saveSettings);
-            Grid.SetRow(settingsSaver, 10);
+            Grid.SetRow(settingsSaver, 11);
             Grid.SetColumn(settingsSaver, 0);
+            settingsSaver.Margin = new Thickness(5);
+            Grid.SetColumnSpan(settingsSaver, 3);
 
             Button settingsLoader = new Button();
             settingsLoader.Content = "Load settings";
             settingsLoader.Click += new RoutedEventHandler(loadSettings);
-            Grid.SetRow(settingsLoader, 11);
+            Grid.SetRow(settingsLoader, 12);
             Grid.SetColumn(settingsLoader, 0);
+            settingsLoader.Margin = new Thickness(5);
+            Grid.SetColumnSpan(settingsLoader, 3);
 
             theGrid.Children.Add(redness);
             theGrid.Children.Add(redSlider);
@@ -361,6 +399,9 @@ namespace lab3
             theGrid.Children.Add(picSaver);
             theGrid.Children.Add(settingsSaver);
             theGrid.Children.Add(settingsLoader);
+            theGrid.Children.Add(flowerAmount);
+            theGrid.Children.Add(flowerSlider);
+            theGrid.Children.Add(flowerAmountText);
             
             grid.Children.Add(control);
          
@@ -412,6 +453,12 @@ namespace lab3
         {
             flowerSize = Convert.ToInt32(e.NewValue);
             flowerSizeText.Content = Convert.ToInt32(e.NewValue);
+        }
+
+        void setNumberOfFlowers(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            numberOfFlowers = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
+            flowerAmountText.Content = Convert.ToInt32(e.NewValue) + "%";
         }
 
         private void saveSettings(object sender, RoutedEventArgs e)
