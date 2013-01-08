@@ -386,21 +386,21 @@ namespace lab3
 
         private void savePNG(object sender, RoutedEventArgs e)
         {
-            util.SaveAsPNG(this, 96, "C:\\Users\\Public\\lab3.png");
+            util.SaveAsPNG(this.canvas, 96, "C:\\Users\\Public\\lab3.png");
         }
 
         public static class util
         {
-            public static void SaveAsPNG(Window window, int dpi, string filename)
+            public static void SaveAsPNG(/*Window window,*/ Canvas canvas, int dpi, string filename)
             {
                 var rtb = new RenderTargetBitmap(
-                    (int)window.Width, // width
-                    (int)window.Width, // height
+                    (int)canvas.ActualWidth, // width
+                    (int)canvas.ActualWidth, // height
                     dpi, // dpi X
                     dpi, // dpi Y
                     PixelFormats.Pbgra32 // Pixelformat
                     );
-                rtb.Render(window);
+                rtb.Render(canvas);
                 saveRTBAsPNG(rtb, filename);
             }
 
