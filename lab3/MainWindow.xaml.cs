@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 using Xceed.Wpf.Toolkit;
 
 namespace lab3
@@ -132,6 +133,7 @@ namespace lab3
             RowDefinition rowDef8 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef9 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef10 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef11 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
@@ -147,6 +149,24 @@ namespace lab3
             theGrid.RowDefinitions.Add(rowDef8);
             theGrid.RowDefinitions.Add(rowDef9);
             theGrid.RowDefinitions.Add(rowDef10);
+            theGrid.RowDefinitions.Add(rowDef11);
+
+            //Get values from the saved settings. If no settings exists, create default values.
+            if (!File.Exists("C:\\Users\\Public\\settings.txt"))
+            {
+                string[] defaultSettings = {200+"",
+                                     50+"",
+                                     200+"",
+                                     50+"",
+                                     60+"",
+                                     50+"",
+                                     50+"",
+                                     50+""};
+
+                System.IO.File.WriteAllLines("C:\\Users\\Public\\settings.txt", defaultSettings);
+            }
+
+            string[] settings = System.IO.File.ReadAllLines("C:\\Users\\Public\\settings.txt");
 
             Label redness = new Label();
             redness.Content = "Redness";
@@ -156,7 +176,7 @@ namespace lab3
             Slider redSlider = new Slider();
             redSlider.Minimum = 40;
             redSlider.Maximum = 215;
-            redSlider.Value = 200;
+            redSlider.Value = Convert.ToInt32(settings[0]);
             redInt = Convert.ToInt32(redSlider.Value);
             redSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setRedness);
             Grid.SetRow(redSlider, 0);
@@ -174,7 +194,7 @@ namespace lab3
             Slider greenSlider = new Slider();
             greenSlider.Minimum = 40;
             greenSlider.Maximum = 215;
-            greenSlider.Value = 50;
+            greenSlider.Value = Convert.ToInt32(settings[1]);
             greenInt = Convert.ToInt32(greenSlider.Value);
             greenSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setGreenness);
             Grid.SetRow(greenSlider, 1);
@@ -192,7 +212,7 @@ namespace lab3
             Slider blueSlider = new Slider();
             blueSlider.Minimum = 40;
             blueSlider.Maximum = 215;
-            blueSlider.Value = 200;
+            blueSlider.Value = Convert.ToInt32(settings[2]);
             blueInt = Convert.ToInt32(blueSlider.Value);
             blueSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setBlueness);
             Grid.SetRow(blueSlider, 2);
@@ -210,7 +230,7 @@ namespace lab3
             Slider leafSizeSlider = new Slider();
             leafSizeSlider.Minimum = 20;
             leafSizeSlider.Maximum = 80;
-            leafSizeSlider.Value = 50;
+            leafSizeSlider.Value = Convert.ToInt32(settings[3]);
             leafSizeInt = Convert.ToInt32(leafSizeSlider.Value);
             leafSizeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setLeafSize);
             Grid.SetRow(leafSizeSlider, 3);
@@ -228,7 +248,7 @@ namespace lab3
             Slider stemSlider = new Slider();
             stemSlider.Minimum = 20;
             stemSlider.Maximum = 100;
-            stemSlider.Value = 60;
+            stemSlider.Value = Convert.ToInt32(settings[4]);
             numberOfStems = Convert.ToInt32(stemSlider.Value);
             stemSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfStems);
             Grid.SetRow(stemSlider, 4);
@@ -246,7 +266,7 @@ namespace lab3
             Slider thornSlider = new Slider();
             thornSlider.Minimum = 0;
             thornSlider.Maximum = 100;
-            thornSlider.Value = 50;
+            thornSlider.Value = Convert.ToInt32(settings[5]);
             numberOfThorns = (Convert.ToInt32(thornSlider.Value) * numberOfStems) / 100;
             thornSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfThorns);
             Grid.SetRow(thornSlider, 5);
@@ -264,7 +284,7 @@ namespace lab3
             Slider leafSlider = new Slider();
             leafSlider.Minimum = 0;
             leafSlider.Maximum = 100;
-            leafSlider.Value = 50;
+            leafSlider.Value = Convert.ToInt32(settings[6]);
             numberOfLeaves = (Convert.ToInt32(leafSlider.Value) * numberOfStems) / 100;
             leafSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setNumberOfLeaves);
             Grid.SetRow(leafSlider, 6);
@@ -282,7 +302,7 @@ namespace lab3
             Slider flowerSizeSlider = new Slider();
             flowerSizeSlider.Minimum = 20;
             flowerSizeSlider.Maximum = 80;
-            flowerSizeSlider.Value = 50;
+            flowerSizeSlider.Value = Convert.ToInt32(settings[7]);
             flowerSize = Convert.ToInt32(flowerSizeSlider.Value);
             flowerSizeSlider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(setFlowerSize);
             Grid.SetRow(flowerSizeSlider, 7);
@@ -304,6 +324,12 @@ namespace lab3
             picSaver.Click += new RoutedEventHandler(savePNG);
             Grid.SetRow(picSaver, 9);
             Grid.SetColumn(picSaver, 0);
+
+            Button settingsSaver = new Button();
+            settingsSaver.Content = "Save settings";
+            settingsSaver.Click += new RoutedEventHandler(saveSettings);
+            Grid.SetRow(settingsSaver, 10);
+            Grid.SetColumn(settingsSaver, 0);
 
             theGrid.Children.Add(redness);
             theGrid.Children.Add(redSlider);
@@ -331,6 +357,7 @@ namespace lab3
             theGrid.Children.Add(flowerSizeText);
             theGrid.Children.Add(generator);
             theGrid.Children.Add(picSaver);
+            theGrid.Children.Add(settingsSaver);
             
             grid.Children.Add(control);
          
@@ -382,6 +409,20 @@ namespace lab3
         {
             flowerSize = Convert.ToInt32(e.NewValue);
             flowerSizeText.Content = (int)e.NewValue;
+        }
+
+        private void saveSettings(object sender, RoutedEventArgs e)
+        {
+            string[] settings = {redInt+"",
+                                 greenInt+"",
+                                 blueInt+"",
+                                 leafSizeInt+"",
+                                 numberOfStems+"",
+                                 (numberOfThorns*100)/numberOfStems+"",
+                                 (numberOfLeaves*100)/numberOfStems+"",
+                                 flowerSize+""};
+
+            System.IO.File.WriteAllLines("C:\\Users\\Public\\settings.txt", settings);
         }
 
         private void savePNG(object sender, RoutedEventArgs e)
