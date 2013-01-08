@@ -369,49 +369,49 @@ namespace lab3
         void setRedness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             redInt = Convert.ToInt32(e.NewValue);
-            rednessText.Content = (int) e.NewValue;
+            rednessText.Content = Convert.ToInt32(e.NewValue);
         }
 
         void setGreenness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             greenInt = Convert.ToInt32(e.NewValue);
-            greennessText.Content = (int) e.NewValue;
+            greennessText.Content = Convert.ToInt32(e.NewValue);
         }
 
         void setBlueness(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             blueInt = Convert.ToInt32(e.NewValue);
-            bluenessText.Content = (int) e.NewValue;
+            bluenessText.Content = Convert.ToInt32(e.NewValue);
         }
 
         void setLeafSize(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             leafSizeInt = Convert.ToInt32(e.NewValue);
-            leafSizeText.Content = (int)e.NewValue;
+            leafSizeText.Content = Convert.ToInt32(e.NewValue);
         }
 
         void setNumberOfStems(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             numberOfStems = Convert.ToInt32(e.NewValue);
-            stemAmountText.Content = numberOfStems;
+            stemAmountText.Content = Convert.ToInt32(e.NewValue);
         }
 
         void setNumberOfThorns(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             numberOfThorns = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
-            thornAmountText.Content = (int) e.NewValue + "%";
+            thornAmountText.Content = Convert.ToInt32(e.NewValue) + "%";
         }
 
         void setNumberOfLeaves(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             numberOfLeaves = (Convert.ToInt32(e.NewValue) * numberOfStems) / 100;
-            leafAmountText.Content = (int) e.NewValue + "%";
+            leafAmountText.Content = Convert.ToInt32(e.NewValue) + "%";
         }
 
         private void setFlowerSize(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             flowerSize = Convert.ToInt32(e.NewValue);
-            flowerSizeText.Content = (int)e.NewValue;
+            flowerSizeText.Content = Convert.ToInt32(e.NewValue);
         }
 
         private void saveSettings(object sender, RoutedEventArgs e)
@@ -438,8 +438,8 @@ namespace lab3
                                      blueInt+"",
                                      leafSizeInt+"",
                                      numberOfStems+"",
-                                     (numberOfThorns*100)/numberOfStems+"",
-                                     (numberOfLeaves*100)/numberOfStems+"",
+                                     thornAmountText.Content.ToString().Substring(0, thornAmountText.Content.ToString().Length - 1)+"",
+                                     leafAmountText.Content.ToString().Substring(0, leafAmountText.Content.ToString().Length - 1)+"",
                                      flowerSize+""};
 
                 System.IO.File.WriteAllLines(filename, settings);
