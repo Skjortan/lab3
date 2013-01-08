@@ -27,7 +27,7 @@ namespace lab3
         public Canvas canvas = new Canvas();
         public ChildWindow control = new ChildWindow();
 
-        public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, flowerSize, redInt, greenInt, blueInt;
+        public int leafSizeInt, numberOfStems, numberOfThorns, numberOfLeaves, numberOfFlowers, flowerSize, redInt, greenInt, blueInt;
 
         public Label rednessText = new Label();
         public Label greennessText = new Label();
