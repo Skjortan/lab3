@@ -38,6 +38,15 @@ namespace lab3
         public Label leafAmountText = new Label();
         public Label flowerSizeText = new Label();
 
+        public Slider redSlider = new Slider();
+        public Slider greenSlider = new Slider();
+        public Slider blueSlider = new Slider();
+        public Slider leafSizeSlider = new Slider();
+        public Slider stemSlider = new Slider();
+        public Slider thornSlider = new Slider();
+        public Slider leafSlider = new Slider();
+        public Slider flowerSizeSlider = new Slider();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -134,6 +143,7 @@ namespace lab3
             RowDefinition rowDef9 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef10 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
             RowDefinition rowDef11 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+            RowDefinition rowDef12 = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
 
             theGrid.ColumnDefinitions.Add(colDef1);
             theGrid.ColumnDefinitions.Add(colDef2);
@@ -150,30 +160,23 @@ namespace lab3
             theGrid.RowDefinitions.Add(rowDef9);
             theGrid.RowDefinitions.Add(rowDef10);
             theGrid.RowDefinitions.Add(rowDef11);
+            theGrid.RowDefinitions.Add(rowDef12);
 
-            //Get values from the saved settings. If no settings exists, create default values.
-            if (!File.Exists("C:\\Users\\Public\\settings.txt"))
-            {
-                string[] defaultSettings = {200+"",
-                                     50+"",
-                                     200+"",
-                                     50+"",
-                                     60+"",
-                                     50+"",
-                                     50+"",
-                                     50+""};
-
-                System.IO.File.WriteAllLines("C:\\Users\\Public\\settings.txt", defaultSettings);
-            }
-
-            string[] settings = System.IO.File.ReadAllLines("C:\\Users\\Public\\settings.txt");
+            // Set the default settings
+            string[] settings = {200+"",
+                                 50+"",
+                                 200+"",
+                                 50+"",
+                                 60+"",
+                                 50+"",
+                                 50+"",
+                                 50+""};
 
             Label redness = new Label();
             redness.Content = "Redness";
             Grid.SetRow(redness, 0);
             Grid.SetColumn(redness, 0);
 
-            Slider redSlider = new Slider();
             redSlider.Minimum = 40;
             redSlider.Maximum = 215;
             redSlider.Value = Convert.ToInt32(settings[0]);
@@ -191,7 +194,6 @@ namespace lab3
             Grid.SetRow(greenness, 1);
             Grid.SetColumn(greenness, 0);
 
-            Slider greenSlider = new Slider();
             greenSlider.Minimum = 40;
             greenSlider.Maximum = 215;
             greenSlider.Value = Convert.ToInt32(settings[1]);
@@ -209,7 +211,6 @@ namespace lab3
             Grid.SetRow(blueness, 2);
             Grid.SetColumn(blueness, 0);
 
-            Slider blueSlider = new Slider();
             blueSlider.Minimum = 40;
             blueSlider.Maximum = 215;
             blueSlider.Value = Convert.ToInt32(settings[2]);
@@ -227,7 +228,6 @@ namespace lab3
             Grid.SetRow(leafSize, 3);
             Grid.SetColumn(leafSize, 0);
 
-            Slider leafSizeSlider = new Slider();
             leafSizeSlider.Minimum = 20;
             leafSizeSlider.Maximum = 80;
             leafSizeSlider.Value = Convert.ToInt32(settings[3]);
@@ -245,7 +245,6 @@ namespace lab3
             Grid.SetRow(stemAmount, 4);
             Grid.SetColumn(stemAmount, 0);
 
-            Slider stemSlider = new Slider();
             stemSlider.Minimum = 20;
             stemSlider.Maximum = 100;
             stemSlider.Value = Convert.ToInt32(settings[4]);
@@ -263,7 +262,6 @@ namespace lab3
             Grid.SetRow(thornAmount, 5);
             Grid.SetColumn(thornAmount, 0);
 
-            Slider thornSlider = new Slider();
             thornSlider.Minimum = 0;
             thornSlider.Maximum = 100;
             thornSlider.Value = Convert.ToInt32(settings[5]);
@@ -281,7 +279,6 @@ namespace lab3
             Grid.SetRow(leafAmount, 6);
             Grid.SetColumn(leafAmount, 0);
 
-            Slider leafSlider = new Slider();
             leafSlider.Minimum = 0;
             leafSlider.Maximum = 100;
             leafSlider.Value = Convert.ToInt32(settings[6]);
@@ -299,7 +296,6 @@ namespace lab3
             Grid.SetRow(flowerSizeLabel, 7);
             Grid.SetColumn(flowerSizeLabel, 0);
 
-            Slider flowerSizeSlider = new Slider();
             flowerSizeSlider.Minimum = 20;
             flowerSizeSlider.Maximum = 80;
             flowerSizeSlider.Value = Convert.ToInt32(settings[7]);
@@ -331,6 +327,12 @@ namespace lab3
             Grid.SetRow(settingsSaver, 10);
             Grid.SetColumn(settingsSaver, 0);
 
+            Button settingsLoader = new Button();
+            settingsLoader.Content = "Load settings";
+            settingsLoader.Click += new RoutedEventHandler(loadSettings);
+            Grid.SetRow(settingsLoader, 11);
+            Grid.SetColumn(settingsLoader, 0);
+
             theGrid.Children.Add(redness);
             theGrid.Children.Add(redSlider);
             theGrid.Children.Add(rednessText);
@@ -358,6 +360,7 @@ namespace lab3
             theGrid.Children.Add(generator);
             theGrid.Children.Add(picSaver);
             theGrid.Children.Add(settingsSaver);
+            theGrid.Children.Add(settingsLoader);
             
             grid.Children.Add(control);
          
@@ -413,16 +416,77 @@ namespace lab3
 
         private void saveSettings(object sender, RoutedEventArgs e)
         {
-            string[] settings = {redInt+"",
-                                 greenInt+"",
-                                 blueInt+"",
-                                 leafSizeInt+"",
-                                 numberOfStems+"",
-                                 (numberOfThorns*100)/numberOfStems+"",
-                                 (numberOfLeaves*100)/numberOfStems+"",
-                                 flowerSize+""};
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+            // Open a default directory if it exists
+            string path = "C:\\Users\\Public\\";
+            if (Directory.Exists(path))
+            {
+                dlg.InitialDirectory = path;
+            }
+            else
+            {
+                dlg.InitialDirectory = @"C:\";
+            }
+            if (dlg.ShowDialog() == true)
+            {
+                string filename = dlg.FileName;
 
-            System.IO.File.WriteAllLines("C:\\Users\\Public\\settings.txt", settings);
+                string[] settings = {redInt+"",
+                                     greenInt+"",
+                                     blueInt+"",
+                                     leafSizeInt+"",
+                                     numberOfStems+"",
+                                     (numberOfThorns*100)/numberOfStems+"",
+                                     (numberOfLeaves*100)/numberOfStems+"",
+                                     flowerSize+""};
+
+                System.IO.File.WriteAllLines(filename, settings);
+            }
+        }
+
+        private void loadSettings(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+
+            // Set filter for file extension and default file extension
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+
+            // Open a default directory if it exists
+            string path = "C:\\Users\\Public\\";
+            if (Directory.Exists(path))
+            {
+                dlg.InitialDirectory = path;
+            }
+            else
+            {
+                dlg.InitialDirectory = @"C:\";
+            } 
+
+            // Display OpenFileDialog by calling ShowDialog method
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox
+            if (result == true)
+            {
+                // Open document
+                string filename = dlg.FileName;
+                Console.WriteLine(filename);
+
+                string[] settings = System.IO.File.ReadAllLines(filename);
+
+                redSlider.Value = Convert.ToInt32(settings[0]);
+                greenSlider.Value = Convert.ToInt32(settings[1]);
+                blueSlider.Value = Convert.ToInt32(settings[2]);
+                leafSizeSlider.Value = Convert.ToInt32(settings[3]);
+                stemSlider.Value = Convert.ToInt32(settings[4]);
+                thornSlider.Value = Convert.ToInt32(settings[5]);
+                leafSlider.Value = Convert.ToInt32(settings[6]);
+                flowerSizeSlider.Value = Convert.ToInt32(settings[7]);
+            }
         }
 
         private void savePNG(object sender, RoutedEventArgs e)
