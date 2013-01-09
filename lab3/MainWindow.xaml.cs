@@ -487,7 +487,8 @@ namespace lab3
                                      numberOfStems+"",
                                      thornAmountText.Content.ToString().Substring(0, thornAmountText.Content.ToString().Length - 1)+"",
                                      leafAmountText.Content.ToString().Substring(0, leafAmountText.Content.ToString().Length - 1)+"",
-                                     flowerSize+""};
+                                     flowerSize+"",
+                                     flowerAmountText.Content.ToString().Substring(0, flowerAmountText.Content.ToString().Length - 1)+""};
 
                 System.IO.File.WriteAllLines(filename, settings);
             }
