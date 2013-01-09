@@ -534,6 +534,7 @@ namespace lab3
                 thornSlider.Value = Convert.ToInt32(settings[5]);
                 leafSlider.Value = Convert.ToInt32(settings[6]);
                 flowerSizeSlider.Value = Convert.ToInt32(settings[7]);
+                flowerSlider.Value = Convert.ToInt32(settings[8]);
             }
         }
 
@@ -566,7 +567,7 @@ namespace lab3
                 {
                     enc.Save(stm);
                 }
-                Console.WriteLine("You saved a PNG");
+                System.Windows.MessageBox.Show("You have saved your bouquet as a picture.", "Congratulations!");
             }
         }
     }
